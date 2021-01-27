@@ -1,5 +1,5 @@
 clear
-cd "C:\Users\mason\Documents\projects\empirical_io\problem_sets"
+cd "C:\Users\mason\Documents\projects\empirical_io\empirical_io-problem_sets"
 
 use "data\databeer_ps1.dta"
 
@@ -25,9 +25,16 @@ reg Q hp yp tv party Z
 predict qhat
 
 *** SECOND-STAGE -----------------
-** INVERSE Supply and Demand Equations, respectively
+** Demand Equations
 reg Q phat tv party Z
+
+** Supply
 reg P qhat hp yp
+
+*** INVERSE Demand Function ----------------
+
+
+
 
 *** USING ivreg2
 * ivreg2 Q (P = hp yp) tv party Z
