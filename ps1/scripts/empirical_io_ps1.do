@@ -59,3 +59,11 @@ ivreg2 Q (P pz = hp yp hpz ypz) tv party
 
 
 ivreg2 P (Q qstar = tv party pz) hp yp
+
+
+
+**** QUESTION 5
+
+mean P tv party pz
+sum P tv party pz
+
