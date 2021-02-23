@@ -61,38 +61,38 @@ egen other_products = count(co), by(yearcountry class)
 replace other_products = other_products - number_co
 
 
-** Question 1
+** Question 1. Be sure to run all the above code 1 time before running:
 
 mergersim init, price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
 
-xtivreg M_ls (princ fuel = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products), fe
+xtivreg M_ls (princ fuel = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe vce(robust)
 
-** Simulate pre-merger market conditions
+** Simulate pre-merger market conditions. With these instruments, MC is shown as negative...strange results. Maybe indicates that instruments are wrong or inadequate
 
 mergersim market if year == 1999
 
 
 * Question 2
 
-** Here we find negative marginal costs; there is likely some error in the model or the instrument calculation..
+** The marginal costs and lerner indicies here make sense. And alpha < 0 and 0 < sigma1 < 1
 
 mergersim init, nest(class) price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
 
-xtivreg M_ls (princ fuel M_lsjg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
+xtivreg M_ls (princ fuel M_lsjg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe vce(robust)
 
 mergersim market if year == 1999
 
 * Question 3
 mergersim init, nests(domestic class) price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
 
-xtivreg M_ls (princ fuel M_lsjh M_lshg = height width weight horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
+xtivreg M_ls (princ fuel M_lsjh M_lshg = height width weight horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe vce(robust)
 
 * Interaction terms??
 ** c.width#i.class c.height#i.class c.horsepower#i.class c.fuel_of_others#i.class c.hp_of_others#i.class c.weight_of_others#i.class c.height#i.domestic c.fuel_of_others#i.domestic c.width_of_others#i.domestic c.other_products#i.domestic c.other_products#i.class
 
 ** Adding these just makes the model even worse
 
-** ERROR: Sigma 2 should be less than Sigma 1...
+** ERROR: Sigma 2 should be less than Sigma 1... We find negative MC and very high LI
 mergersim market if year == 1999
 
 
@@ -120,7 +120,7 @@ mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) detail
 
 mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) sellereff(0.01) buyereff(0.01) detail
 
-** The results are strange: both CS and PS decrease, but very little
+** The results are strange: both CS and PS decrease, but very little. We would expect them to increase from the synergies of lower MC
 
 **** TESTING with other firms ****
 
@@ -128,7 +128,7 @@ mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) sellereff(
 ** If Suzuki (low avg fuel cost of 4.87) merges with BMW (high avg fuel cost of 7.33)
 mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) detail
 
-** Results seem reasonable, with consumer surplus dropping and producer surplus increasing. Now testing with marginal cost dropping by 1%
+** Results of a Suzuki-BMW merger seem reasonable, with consumer surplus dropping and producer surplus increasing. Now testing with marginal cost dropping by 1%
 
 mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) sellereff(0.01) buyereff(0.01) detail
 
@@ -141,7 +141,7 @@ mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) sellereff
 
 mergersim init, nest(class) price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
 
-xtivreg M_ls (princ fuel M_lsjg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
+xtivreg M_ls (princ fuel M_lsjg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe vce(robust)
 
 
 
@@ -153,9 +153,7 @@ mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) detail
 
 mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) sellereff(0.01) buyereff(0.01) detail
 
-** 
-
-
+** This model makes a little more economic sense than the two-nested model: a decrease in MC should result in slightly higher consumer surplus. However, why does PS decrease?
 
 
 
