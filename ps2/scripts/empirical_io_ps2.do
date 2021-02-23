@@ -21,8 +21,8 @@ xtset co yearcountry
 ** We need the following instruments as from Brenkers and Verboven 2006:
 ** (i) the products' observed characteristics,
 ** (ii) the number of products, and the sums of characteristics of other products of the same firm belonging to the same subgroup, interacted with the set of subgroup dummy variables
-** (iii) the number of products, and the sums of the characteristics of competing products belonging to the same subgroup, interacted with the set of subgroup dummy variables andiv
-** (iv) the number of productsand the sums of the characteristics of competing products belonging to the same group, interacted with the set of group dummy variables
+** (iii) the number of products, and the sums of the characteristics of competing products belonging to the same subgroup, interacted with the set of subgroup dummy variables and
+** (iv) the number of products and the sums of the characteristics of competing products belonging to the same group, interacted with the set of group dummy variables
 
 
 ** Sum fuel for each class in each year and country
@@ -85,14 +85,14 @@ mergersim market if year == 1999
 * Question 3
 mergersim init, nests(domestic class) price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
 
-xtivreg M_ls (princ fuel M_lsjh M_lshg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
+xtivreg M_ls (princ fuel M_lsjh M_lshg = height width weight horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
 
 * Interaction terms??
 ** c.width#i.class c.height#i.class c.horsepower#i.class c.fuel_of_others#i.class c.hp_of_others#i.class c.weight_of_others#i.class c.height#i.domestic c.fuel_of_others#i.domestic c.width_of_others#i.domestic c.other_products#i.domestic c.other_products#i.class
 
 ** Adding these just makes the model even worse
 
-
+** ERROR: Sigma 2 should be less than Sigma 1...
 mergersim market if year == 1999
 
 
@@ -103,26 +103,57 @@ mergersim market if year == 1999
 ** Codes for firms: AlfaRomeo = 1, kia = 9
 
 ** Testing a merger that we are sure would have some effect: a merger between BMW and Volkswagen
+
 mergersim simulate if year == 1999 & country == 3, seller(2) buyer(26) detail
 
+*** a high decrease in CS and a large (but smaller) increase in PS makes sense with this merger
 
-** The merger of interest: Kia and AlfaRomeo in 1999 in Germany.
+
+
+**** The merger of interest: Kia & AlfaRomeo in 1999 in Germany ****
 
 ** No effect if MC does not change
 mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) detail
 
 
-** If both firms have a decrease of MC by 1%, then consumer surplus increases by 84 and producer surplus decreases by 14.
+** If both firms have a decrease of MC by 1%
 
 mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) sellereff(0.01) buyereff(0.01) detail
 
+** The results are strange: both CS and PS decrease, but very little
+
+**** TESTING with other firms ****
+
+
+** If Suzuki (low avg fuel cost of 4.87) merges with BMW (high avg fuel cost of 7.33)
+mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) detail
+
+** Results seem reasonable, with consumer surplus dropping and producer surplus increasing. Now testing with marginal cost dropping by 1%
+
+mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) sellereff(0.01) buyereff(0.01) detail
+
+** Consumer surplus increases, which we would expect. However, producer surplus actually falls... Since this model has a sigma2 > sigma1, this may explain why we find strange results.
 
 
 
+*** Retrying Q4 with Q2 model (nest only by class, not by domestic and class)
+
+
+mergersim init, nest(class) price(princ) quantity(qu) marketsize(MSIZE) firm(firm)
+
+xtivreg M_ls (princ fuel M_lsjg = weight width height horsepower weight_by_firm width_by_firm height_by_firm hp_by_firm fuel_by_firm fuel_of_others hp_of_others weight_of_others height_of_others width_of_others other_products year country2-country5), fe
 
 
 
+** As before, no effect if MC does not change
+mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) detail
 
+
+** If both firms have a decrease of MC by 1%
+
+mergersim simulate if year == 1999 & country == 3, seller(1) buyer(9) sellereff(0.01) buyereff(0.01) detail
+
+** 
 
 
 
