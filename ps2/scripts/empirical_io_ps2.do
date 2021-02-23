@@ -172,7 +172,11 @@ mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) detail
 
 
 
+** If Suzuki (low avg fuel expenditure 4.87) merges with BMW (high avg fuel expenditure of 7.33)
+mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) detail
 
+
+mergersim simulate if year == 1999 & country == 3, seller(24) buyer(2) sellereff(0.01) buyereff(0.01) detail
 
 
 
