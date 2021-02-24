@@ -24,7 +24,7 @@ Following the prominent literature, I choose instruments for the endogenous vari
     * Sum of product characteristics for all other firms $j \neq i$ in that year, class and country
 
 
-If "firms choose fuel consumption strategically in response to competitors and quickly adjust engines in response to new market information", then we would expect that market (year and country) and class (luxury cars are not directly competing with small cars) are important, and that the product characteristics of a firm's competitors in a market and a class are important information that indicate to a firm to adjust engines or not. 
+If "firms choose fuel consumption strategically in response to competitors and quickly adjust engines in response to new market information", then I expect that market (year and country) and class (luxury cars are not directly competing with small cars) are important, and that the product characteristics of a firm's competitors in a market and a class are important information that indicate to a firm to adjust engines or not. 
 
 The instruments I have chosen should account for this information.
 
@@ -45,7 +45,7 @@ xtivreg M_ls (princ fuel = weight width height horsepower weight_by_firm
 
 # Question 2
 
-Now we nest by `class`, running the same code as above but adding the line `nests(class)` in its respective position after initializing the merger simulation.
+Now I nest by `class`, running the same code as above but adding the line `nests(class)` in its respective position after initializing the merger simulation.
 
 The estimated log of the group market share `M_lsjg` is also endogenous, so I also instrument for this.
 
@@ -91,7 +91,7 @@ Before analyzing the Kia-AlfaRomeo merger, I first look at mergers that I would 
 | Consumer surplus | -17,510         | -11,848       |
 | Producer surplus | 12,557          | 14,934        |
 
-These results fit what we would expect: a merger between such large firms with high market shares result in a drop in CS but an increase in PS. And, a fall in marginal costs slightly offsets the drop in CS. Note additionally that total welfare is lower in the case of no change in MC, but higher if MC drops by 1%.
+These results fit what is expected: a merger between such large firms with high market shares result in a drop in CS but an increase in PS. And, a fall in marginal costs slightly offsets the drop in CS. Note additionally that total welfare is lower in the case of no change in MC, but higher if MC drops by 1%.
 
 Now, let us see if the merger with Kia and AlfaRomeo exhibits similar properties
 
@@ -132,7 +132,7 @@ As discussed in lecture, for each product $j$, the `mergersim` package solves th
 
 Assuming that the fuel standard has only the impacts that I calculated in Question 4 under the Kia AlfaRomeo merger, then there is an increase in total and consumer surplus. CS increases by 74 and TS by 54.
 
-However, from such a fuel standard we may have other firms with high costs merging with firms with low fuel costs. For example, if Suzuki (low fuel expenditure of 4.87) merges with BMW (high avg fuel expenditure of 7.33), we have:
+However, from such a fuel standard we may have other firms with high costs merging with firms with low fuel costs. For example, if Suzuki (low fuel expenditure of 4.87) merges with BMW (high avg fuel expenditure of 7.33), post-merger changes in welfare are:
 
 
 | Change in        | No change in MC | 1% drop in MC |
