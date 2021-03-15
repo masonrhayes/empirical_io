@@ -47,10 +47,46 @@ xtreg ldsal ldnpt ldrst lemp i.yr, fe vce(robust)
 
 * exit = 1 if firm exits sometime between the last observed period and the next period
 
-gen exit = 0
+gen exit = 0 if yr != 88
 bysort index: replace exit =1 if yr[_n+1] != yr[_n] + 5 & yr[_n] != 88
 
 xtprobit exit lemp ldnpt ldrst ldinv
+
+
+
+* Question 4
+* How many interactions to add??
+
+  forvalues i = 0/3 {
+    forvalues j = 0/3 {
+    forvalues k = 0/3 {
+	forvalues h = 0/3 {
+    if `i'+`j'+`k'+`h'<=3 { 
+    gen pol`i'`j'`k'`h' = ldnpt^(`i')*ldrst^(`j')*lemp^(`k')*ldinv^(`h')
+    }
+    }
+    }
+    }
+  }
+
+
+xtreg ldsal pol*, vce(r)
+
+* There must be a direct way to get residuals...
+predict output
+gen residuals = ldsal -  output
+
+
+* Make time variable t = 1:4 for yr = 73 to yr = 88, respectively.
+
+gen t = 1
+replace t = 2 if yr == 78
+replace t = 3 if yr == 83
+replace t = 4 if yr == 88
+
+
+xtset index t
+
 
 
 
